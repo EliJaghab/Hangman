@@ -12,10 +12,12 @@ def validateGuess(guess, allGuess, word):
         if len(guess) != 1:
             print("Invalid input.")
             guess = input("Guess a Letter: ").lower()
+        elif guess in allGuess:
+            print("You already guessed this letter.")
+            guess = input("Guess a Letter: ").lower()
         else:
             allGuess += guess
             break
-    print("All Guesses: ", allGuess)
     if guess in word:
         return True
     else:
@@ -33,20 +35,54 @@ def visuals(allGuess, word):
     for underscore in underscores:
         underscoresFormatted += underscore
 
-    print(underscoresFormatted)
+    return underscoresFormatted
 
 def gameLogic(word):
     allGuess = ''
     incorrect = ''
     guess = ''
-    while True:
-        visuals(allGuess, word)
+    life = 8
+    while life > 0:
+        print(visuals(allGuess, word))
         guess = input("Guess a Letter: ").lower()
         if validateGuess(guess, allGuess, word):
-            print("Correct")
+            print("Correct. Incorrect Guesses:", incorrect, "Remaining Life:", life)
             allGuess += guess
+            if visuals(allGuess, word) == word:
+                print("You won!")
+                return True
         else:
             incorrect += guess
-            print("Incorrect. Incorrest Guesses:", incorrect)
+            life -= 1
+            print("Incorrect. Incorrect Guesses:", incorrect, "Remaining Life:", life)
+    print("You Lost!")
 
-gameLogic(getWord())
+
+
+def gameMenu():
+    print("Welcome to Hangman!")
+    player1 = input("Enter your name to begin: ")
+    print("Hello", player1, "\nLoading...")
+    time.sleep(3)
+    count = 0
+    win = 0
+    loss = 0
+    while True:
+        count += 1
+        print("Game", count, "Wins:", win, "Losses:", loss)
+        if gameLogic(getWord()):
+            win += 1
+        else:
+            loss += 1
+        userInput = input("Play Again? (Y/N): ").lower()
+        if userInput == 'y':
+            pass
+        elif userInput == 'n':
+            print("You won", win, ("time" if win == 1 else "times"), "and lost", loss, ("time" if loss == 1 else "times"), "Thanks for playing!")
+            break
+        else:
+            print("Invalid Input.")
+
+
+
+gameMenu()
