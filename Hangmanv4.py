@@ -5,7 +5,7 @@ import time
 def getWord():
     wordsArray = open("words.txt").read().splitlines()
     word = random.choice(wordsArray)
-    return "aeiou"
+    return word
 
 def validateGuess(guess, allGuess, word):
     while True:
@@ -41,7 +41,24 @@ def gameLogic(word):
     allGuess = ''
     incorrect = ''
     guess = ''
-    life = 8
+    print("Easy - E\nMedium - M\nHard - H\nImpossible - I")
+    difficulty = input("Choose difficulty: ").lower()
+    while True:
+        if difficulty == 'e':
+            life = 12
+            break
+        elif difficulty == 'm':
+            life = 8
+            break
+        elif difficulty == 'h':
+            life = 6
+            break
+        elif difficulty == 'i':
+            life = 3
+            break
+        else:
+            print("Invalid Input.")
+            difficulty = input("Choose difficulty: ").lower()
     while life > 0:
         print(visuals(allGuess, word))
         guess = input("Guess a Letter: ").lower()
@@ -56,6 +73,7 @@ def gameLogic(word):
             life -= 1
             print("Incorrect. Incorrect Guesses:", incorrect, "Remaining Life:", life)
     print("You Lost!")
+    print("The word was", word,".")
 
 
 
